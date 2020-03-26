@@ -10,12 +10,12 @@ import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
 import shortid from 'shortid';
 
-// import { connect } from 'react-redux';
-// import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
+import { connect } from 'react-redux';
+import { getAll, addPost } from '../../../redux/postsRedux.js';
 
 import styles from './PostAdd.module.scss';
 
-const Component = ({ className }) => {
+const Component = ({ className, addPost }) => {
 
   const today = new Date();
   const day = today.getDate();
@@ -36,19 +36,19 @@ const Component = ({ className }) => {
     date: date,
   });
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Submitted');
+
+    await addPost(post);
   };
 
-  const handleChange = (event, name) => {
-    setPost({
+  const handleChange = async (event, name) => {
+    await setPost({
       ...post,
       [name]: event.target.value,
     });
   };
-
-  console.log('post', post);
 
   return (
     <div className={clsx(className, styles.root)}>
@@ -113,20 +113,21 @@ const Component = ({ className }) => {
 
 Component.propTypes = {
   className: PropTypes.string,
+  addPost: PropTypes.func,
 };
 
-// const mapStateToProps = state => ({
-//   someProp: reduxSelector(state),
-// });
+const mapStateToProps = state => ({
+  posts: getAll(state),
+});
 
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
+const mapDispatchToProps = dispatch => ({
+  addPost: post => dispatch(addPost(post)),
+});
 
-// const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
+const PostAddContainer = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export {
-  Component as PostAdd,
-  // Container as PostAdd,
+  // Component as PostAdd,
+  PostAddContainer as PostAdd,
   Component as PostAddComponent,
 };
