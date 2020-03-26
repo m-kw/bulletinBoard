@@ -10,6 +10,7 @@ export const initialState = {
         mail: 'johndoe@example.com',
         status: 'published',
         image: 'https://i.ibb.co/MRwRfY3/simon-abrams-e-Mnddgd3pj-Q-unsplash.jpg',
+        userId: '1',
       },
       {
         id: '2',
@@ -17,8 +18,9 @@ export const initialState = {
         content: 'I found some keys on a bus stop Królewska yesterday. Will be happy to give them back to the owner.',
         date: '20.05.2019',
         updateDate: '21.05.2020',
-        mail: 'annyLee@example.com',
+        mail: 'johndoe@example.com',
         status: 'published',
+        userId: '1',
       },
       {
         id: '3',
@@ -29,6 +31,7 @@ export const initialState = {
         mail: 'karinhoe@example.com',
         status: 'published',
         image: 'https://i.ibb.co/TcFrbw4/freddie-marriage-g-L-7-Nt-Zp-YI-unsplash-1.jpg',
+        userId: '2',
       },
       {
         id: '4',
@@ -36,8 +39,9 @@ export const initialState = {
         content: 'I found some keys on a bus stop Królewska yesterday. Will be happy to give them back to the owner.',
         date: '20.05.2019',
         updateDate: '21.05.2020',
-        mail: 'annyLee@example.com',
+        mail: 'johndoe@example.com',
         status: 'published',
+        userId: '1',
       },
       {
         id: '5',
@@ -45,9 +49,10 @@ export const initialState = {
         content: 'Professional Japanese teacher will give lessons to all who want to learn that beautiful language.',
         date: '20.01.2020',
         updateDate: '21.02.2020',
-        mail: 'karinhoe@example.com',
+        mail: 'anny@example.com',
         status: 'published',
         image: 'https://i.ibb.co/TcFrbw4/freddie-marriage-g-L-7-Nt-Zp-YI-unsplash-1.jpg',
+        userId: '3',
       },
     ],
     loading: {
@@ -55,4 +60,9 @@ export const initialState = {
       error: false,
     },
   },
+  users: [
+    { id: '1', mail: 'johndoe@example.com' },
+    { id: '2', mail: 'karinhoe@example.com' },
+    { id: '3', mail: 'anny@example.com' },
+  ],
 };
