@@ -6,7 +6,7 @@ const mockProps = {
   posts: [
     { id: '1', title: 'test', content: 'test' },
     { id: '2', title :'test2', content: 'test 2' },
-  ]
+  ],
 };
 
 describe('Component Homepage', () => {
