@@ -10,43 +10,55 @@ import AddIcon from '@material-ui/icons/Add';
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { getAll } from '../../../redux/postsRedux.js';
+import { getAll, loadPostsRequest } from '../../../redux/postsRedux.js';
 
 import styles from './Homepage.module.scss';
 
-const Component = ({ className, children, posts }) => (
-  <div className={clsx(className, styles.root)}>
+class Component extends React.Component {
 
-    <Container maxWidth="lg">
-      <Fab color="secondary" aria-label="add" href="/post/add" className={styles.button}>
-        <AddIcon />
-      </Fab>
+  static propTypes = {
+    className: PropTypes.string,
+    children: PropTypes.node,
+    posts: PropTypes.array,
+    loadPosts: PropTypes.func,
+  }
 
-      {posts.map(el => (
-        <Card key={el.id} className={styles.card}>
-          <CardHeader title={el.title} subheader={`${el.date}/${el.updateDate}`}/>
-        </Card>
-      ))}
-    </Container>
-    {children}
-  </div>
-);
+  // componentDidMount() {
+  //   this.props.loadPosts();
+  // }
 
-Component.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  posts: PropTypes.array,
-};
+  render() {
+    const { className, children, posts } = this.props;
+
+    return (
+      <div className={clsx(className, styles.root)}>
+
+        <Container maxWidth="lg">
+          <Fab color="secondary" aria-label="add" href="/post/add" className={styles.button}>
+            <AddIcon />
+          </Fab>
+
+          {posts.map(el => (
+            <Card key={el.id} className={styles.card}>
+              <CardHeader title={el.title} subheader={`${el.date}/${el.updateDate}`} />
+            </Card>
+          ))}
+        </Container>
+        {children}
+      </div>
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   posts: getAll(state),
 });
 
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
+const mapDispatchToProps = (dispatch, state) => ({
+  loadPosts: () => dispatch(loadPostsRequest(state)),
+});
 
-const HomepageContainer = connect(mapStateToProps)(Component);
+const HomepageContainer = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export {
   // Component as Homepage,
