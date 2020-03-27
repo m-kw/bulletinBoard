@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { getAll } from '../../../redux/postsRedux.js';
+import { getAll, updatePost } from '../../../redux/postsRedux.js';
 
 import styles from './PostEdit.module.scss';
 
@@ -123,11 +123,11 @@ const mapStateToProps = state => ({
   posts: getAll(state),
 });
 
-// const mapDispatchToProps = dispatch => ({
-//   updatePost: post => dispatch(updatePost(post)),
-// });
+const mapDispatchToProps = dispatch => ({
+  updatePost: post => dispatch(updatePost(post)),
+});
 
-const PostEditContainer = connect(mapStateToProps)(Component);
+const PostEditContainer = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export {
   // Component as PostEdit,
