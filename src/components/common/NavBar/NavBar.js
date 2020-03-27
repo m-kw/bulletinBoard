@@ -26,8 +26,8 @@ const Component = ({ className, title, user }) => (
 
         {user.logged ?
           <div className={styles.menu}>
-            <Button color="inherit">My posts</Button>
-            <Button color="inherit">Logout</Button>
+            <Button color="inherit" href="/user-posts">My posts</Button>
+            <Button color="inherit" href="/">Logout</Button>
           </div>
           : <Button color="inherit" href="https://google.com" className={styles.login}>Login</Button>
         }
