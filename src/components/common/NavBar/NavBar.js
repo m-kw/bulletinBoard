@@ -8,12 +8,12 @@ import Button from '@material-ui/core/Button';
 
 import clsx from 'clsx';
 
-// import { connect } from 'react-redux';
-// import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
+import { connect } from 'react-redux';
+import { getUser } from '../../../redux/userRedux.js';
 
 import styles from './NavBar.module.scss';
 
-const Component = ({ className, title, isLogged }) => (
+const Component = ({ className, title, user }) => (
   <div className={clsx(className, styles.root)}>
     <AppBar position="static">
       <Toolbar>
@@ -24,7 +24,7 @@ const Component = ({ className, title, isLogged }) => (
           {title}
         </Typography>
 
-        {isLogged ?
+        {user.logged ?
           <div className={styles.menu}>
             <Button color="inherit">My posts</Button>
             <Button color="inherit">Logout</Button>
@@ -40,21 +40,21 @@ Component.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   title: PropTypes.string,
-  isLogged: PropTypes.bool,
+  user: PropTypes.object,
 };
 
-// const mapStateToProps = state => ({
-//   someProp: reduxSelector(state),
-// });
+const mapStateToProps = state => ({
+  user: getUser(state),
+});
 
 // const mapDispatchToProps = dispatch => ({
 //   someAction: arg => dispatch(reduxActionCreator(arg)),
 // });
 
-// const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
+const Container = connect(mapStateToProps)(Component);
 
 export {
-  Component as NavBar,
-  // Container as NavBar,
+  // Component as NavBar,
+  Container as NavBar,
   Component as NavBarComponent,
 };

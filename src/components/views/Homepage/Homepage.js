@@ -13,6 +13,7 @@ import clsx from 'clsx';
 
 import { connect } from 'react-redux';
 import { getAll, loadPostsRequest } from '../../../redux/postsRedux.js';
+import { getUser } from '../../../redux/userRedux';
 
 import styles from './Homepage.module.scss';
 
@@ -23,6 +24,7 @@ class Component extends React.Component {
     children: PropTypes.node,
     posts: PropTypes.array,
     loadPosts: PropTypes.func,
+    user: PropTypes.object,
   }
 
   // componentDidMount() {
@@ -30,15 +32,18 @@ class Component extends React.Component {
   // }
 
   render() {
-    const { className, children, posts } = this.props;
+    const { className, children, posts, user } = this.props;
 
     return (
       <div className={clsx(className, styles.root)}>
 
         <Container maxWidth="lg">
-          <Fab color="secondary" aria-label="add" href="/post/add" className={styles.button}>
-            <AddIcon />
-          </Fab>
+          {user.logged ?
+            <Fab color="secondary" aria-label="add" href="/post/add" className={styles.button}>
+              <AddIcon />
+            </Fab>
+            : ''
+          }
 
           {posts.map(el => (
             <Card key={el.id} className={styles.card}>
@@ -60,6 +65,7 @@ class Component extends React.Component {
 
 const mapStateToProps = state => ({
   posts: getAll(state),
+  user: getUser(state),
 });
 
 const mapDispatchToProps = (dispatch, state) => ({

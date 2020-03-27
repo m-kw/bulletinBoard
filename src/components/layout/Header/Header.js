@@ -12,7 +12,7 @@ import styles from './Header.module.scss';
 
 const Component = ({ className, children }) => (
   <div className={clsx(className, styles.root)}>
-    <NavBar title='Bulleting board' isLogged={true} />
+    <NavBar title='Bulleting board' />
     {children}
   </div>
 );

@@ -8,6 +8,10 @@ const mockProps = {
     { id: '2', title: 'test2', content: 'test 2' },
   ],
   match: { params: { id: '1' }},
+  user: {
+    id: '1',
+    logged: false,
+  },
 };
 
 describe('Component Post', () => {
