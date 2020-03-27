@@ -1,37 +1,97 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Container from '@material-ui/core/Container';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardActions from '@material-ui/core/CardActions';
+import Button from '@material-ui/core/Button';
+import CardContent from '@material-ui/core/CardContent';
+import TextField from '@material-ui/core/TextField';
+
 import clsx from 'clsx';
 
-// import { connect } from 'react-redux';
-// import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
+import { connect } from 'react-redux';
+import { getAll } from '../../../redux/postsRedux.js';
 
 import styles from './Post.module.scss';
+import { settings } from '../../../settings.js';
 
-const Component = ({className, children}) => (
+const Component = ({ className, children, match, posts }) => (
   <div className={clsx(className, styles.root)}>
-    <h2>Post</h2>
-    {children}
+    <Container maxWidth="lg">
+
+      {posts.filter(el => el.id === match.params.id).map(el => (
+        <Card key={el.id} className={styles.card}>
+          <div className='row'>
+            <CardHeader title={el.title} subheader={`${el.date}/${el.updateDate}`} className={styles.title} />
+
+            {el.price ? <TextField variant="outlined" label="price" className={styles.price} value={el.price} /> : ''}
+
+            {el.image ?
+              <CardMedia
+                component="img"
+                alt="post image"
+                height="140"
+                image={el.image || settings.image}
+                className={styles.image}
+              />
+              : ''
+            }
+          </div>
+
+          <div className="row">
+            <CardContent className={styles.contentWrapper}>
+              <TextField variant="outlined" value={el.content} className={styles.content} />
+
+              <div className={styles.status}>
+                <i>{el.status}</i>
+              </div>
+              <div className={styles.contact}>
+                <h3>Contact details</h3>
+                <p>E-mail: {el.mail}</p>
+                {el.phone ? <p>Phone number: {el.phone}</p> : ''}
+              </div>
+            </CardContent>
+          </div>
+
+          <CardActions className={styles.link}>
+            <Button size="small" color="secondary" variant="contained" href={`/post/${el.id}`}>
+              Edit
+            </Button>
+          </CardActions>
+        </Card>
+      ))}
+
+      {children}
+    </Container>
   </div>
 );
 
 Component.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
+  posts: PropTypes.node,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }),
 };
 
-// const mapStateToProps = state => ({
-//   someProp: reduxSelector(state),
-// });
+const mapStateToProps = state => ({
+  posts: getAll(state),
+});
 
 // const mapDispatchToProps = dispatch => ({
 //   someAction: arg => dispatch(reduxActionCreator(arg)),
 // });
 
-// const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
+const PostContainer = connect(mapStateToProps)(Component);
 
 export {
-  Component as Post,
-  // Container as Post,
+  // Component as Post,
+  PostContainer as Post,
   Component as PostComponent,
 };

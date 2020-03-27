@@ -8,9 +8,11 @@ export const initialState = {
         date: '10.10.2010',
         updateDate: '11.10.2010',
         mail: 'johndoe@example.com',
+        phone: 123456789,
         status: 'published',
         image: 'https://i.ibb.co/MRwRfY3/simon-abrams-e-Mnddgd3pj-Q-unsplash.jpg',
         userId: '1',
+        price: '$10',
       },
       {
         id: '2',
@@ -21,6 +23,7 @@ export const initialState = {
         mail: 'johndoe@example.com',
         status: 'published',
         userId: '1',
+        price: '$30',
       },
       {
         id: '3',
