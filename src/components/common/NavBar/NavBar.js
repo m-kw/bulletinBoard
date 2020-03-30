@@ -20,9 +20,9 @@ const Component = ({ className, title, user }) => (
         {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
           <MenuIcon />
         </IconButton> */}
-        <Typography variant="h6" className={styles.title}>
-          {title}
-        </Typography>
+        <Button color="inherit" className={styles.title} href="/">
+          <h6>{title}</h6>
+        </Button>
 
         {user.logged ?
           <div className={styles.menu}>
