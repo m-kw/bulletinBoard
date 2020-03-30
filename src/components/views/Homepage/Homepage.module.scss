@@ -22,3 +22,13 @@
     }
   }
 }
+
+@media (max-width: 576px) {
+
+  .root{
+
+    .card {
+      flex-direction: column;
+    }
+  }
+}

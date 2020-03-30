@@ -31,3 +31,19 @@
     }
   }
 }
+
+@media (max-width: 567px) {
+
+  .root {
+
+    .card {
+
+      .form {
+
+        .image {
+          margin: 5px auto;
+        }
+      }
+    }
+  }
+}

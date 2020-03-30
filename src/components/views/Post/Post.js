@@ -46,11 +46,12 @@ const Component = ({ className, match, posts, user }) => (
 
           <div className="row">
             <CardContent className={styles.contentWrapper}>
-              <TextField variant="outlined" value={el.content} className={styles.content} />
+              <TextField multiline variant="outlined" value={el.content} className={styles.content} />
 
               <div className={styles.status}>
                 <i>{el.status}</i>
               </div>
+
               <div className={styles.contact}>
                 <h3>Contact details</h3>
                 <p>E-mail: {el.mail}</p>
