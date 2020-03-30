@@ -50,6 +50,8 @@ const Component = ({ className, addPost }) => {
     });
   };
 
+  console.log('post', post);
+
   return (
     <div className={clsx(className, styles.root)}>
       <Container maxWidth="lg">
@@ -73,6 +75,14 @@ const Component = ({ className, addPost }) => {
               type="number"
               value={post.price}
               onChange={e => handleChange(e, 'price')}
+            />
+            <input
+              accept="image/*"
+              className={styles.input}
+              id="upload-photo"
+              multiple
+              type="file"
+              onChange={e => handleChange(e, 'image')}
             />
             <TextField
               variant="outlined"
