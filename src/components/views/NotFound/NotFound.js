@@ -3,14 +3,21 @@ import PropTypes from 'prop-types';
 
 import clsx from 'clsx';
 
+import Button from '@material-ui/core/Button';
+
 // import { connect } from 'react-redux';
 // import { reduxSelector, reduxActionCreator } from '../../../redux/exampleRedux.js';
 
 import styles from './NotFound.module.scss';
+import { settings } from '../../../settings';
 
-const Component = ({className, children}) => (
+const Component = ({ className, children }) => (
   <div className={clsx(className, styles.root)}>
-    <h2>NotFound</h2>
+    <img src={settings.notFound} alt="404 error" className={styles.image} />
+    <div className={styles.content}>
+      <h3>Page not found</h3>
+      <Button size="large" href='/' variant="contained">Go to main page</Button>
+    </div>
     {children}
   </div>
 );

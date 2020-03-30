@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// import { NotFound } from '../NotFound/NotFound';
+
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -60,7 +62,7 @@ const Component = ({ className, children, match, posts, user }) => (
           {user.logged && user.id === el.userId ?
             <CardActions className={styles.link}>
               <Button size="small" color="secondary" variant="contained" href={`/post/${el.id}/edit`}>
-                Edit
+                  Edit
               </Button>
             </CardActions>
             : ''
@@ -68,7 +70,6 @@ const Component = ({ className, children, match, posts, user }) => (
 
         </Card>
       ))}
-
       {children}
     </Container>
   </div>
