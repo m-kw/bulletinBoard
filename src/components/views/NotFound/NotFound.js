@@ -11,19 +11,17 @@ import Button from '@material-ui/core/Button';
 import styles from './NotFound.module.scss';
 import { settings } from '../../../settings';
 
-const Component = ({ className, children }) => (
+const Component = ({ className }) => (
   <div className={clsx(className, styles.root)}>
     <img src={settings.notFound} alt="404 error" className={styles.image} />
     <div className={styles.content}>
       <h3>Page not found</h3>
       <Button size="large" href='/' variant="contained">Go to main page</Button>
     </div>
-    {children}
   </div>
 );
 
 Component.propTypes = {
-  children: PropTypes.node,
   className: PropTypes.string,
 };
 

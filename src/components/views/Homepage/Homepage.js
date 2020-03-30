@@ -21,7 +21,6 @@ class Component extends React.Component {
 
   static propTypes = {
     className: PropTypes.string,
-    children: PropTypes.node,
     posts: PropTypes.array,
     loadPosts: PropTypes.func,
     user: PropTypes.object,
@@ -32,7 +31,7 @@ class Component extends React.Component {
   // }
 
   render() {
-    const { className, children, posts, user } = this.props;
+    const { className, posts, user } = this.props;
 
     return (
       <div className={clsx(className, styles.root)}>
@@ -57,7 +56,6 @@ class Component extends React.Component {
           ))}
 
         </Container>
-        {children}
       </div>
     );
   }
