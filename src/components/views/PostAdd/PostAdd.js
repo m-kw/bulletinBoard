@@ -50,8 +50,6 @@ const Component = ({ className, addPost }) => {
     });
   };
 
-  console.log('post', post);
-
   return (
     <div className={clsx(className, styles.root)}>
       <Container maxWidth="lg">

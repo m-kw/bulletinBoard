@@ -71,6 +71,15 @@ const Component = ({ className, posts, updatePost, match }) => {
               value={post.price}
               onChange={e => handleChange(e, 'price')}
             />
+            <input
+              accept="image/*"
+              className={styles.input}
+              id="upload-photo"
+              multiple
+              type="file"
+              onChange={e => handleChange(e, 'image')}
+            />
+            <img src={post.image} alt="post img" className={styles.image} />
             <TextField
               variant="outlined"
               multiline
