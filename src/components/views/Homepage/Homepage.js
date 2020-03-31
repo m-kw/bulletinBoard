@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { getAll, loadPostsRequest } from '../../../redux/postsRedux.js';
+import { fetchPublished, getPublished } from '../../../redux/postsRedux.js';
 import { getUser } from '../../../redux/userRedux';
 
 import styles from './Homepage.module.scss';
@@ -22,13 +22,14 @@ class Component extends React.Component {
   static propTypes = {
     className: PropTypes.string,
     posts: PropTypes.array,
-    loadPosts: PropTypes.func,
+    getPublished: PropTypes.func,
+    fetchPublished: PropTypes.func,
     user: PropTypes.object,
   }
 
-  // componentDidMount() {
-  //   this.props.loadPosts();
-  // }
+  componentDidMount() {
+    this.props.fetchPublished();
+  }
 
   render() {
     const { className, posts, user } = this.props;
@@ -46,7 +47,7 @@ class Component extends React.Component {
 
           {posts.map(el => (
             <Card key={el.id} className={styles.card}>
-              <CardHeader title={el.title} subheader={`${el.date}/${el.updateDate}`} />
+              <CardHeader title={el.title} subheader={`${el.created}/${el.updated}`} />
               <CardActions className={styles.link}>
                 <Button size="small" color="secondary" variant="contained" href={`/post/${el.id}`}>
                   Show details
@@ -62,12 +63,12 @@ class Component extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  posts: getAll(state),
+  posts: getPublished(state),
   user: getUser(state),
 });
 
 const mapDispatchToProps = (dispatch, state) => ({
-  loadPosts: () => dispatch(loadPostsRequest(state)),
+  fetchPublished: () => dispatch(fetchPublished(state)),
 });
 
 const HomepageContainer = connect(mapStateToProps, mapDispatchToProps)(Component);

@@ -1,8 +1,8 @@
 import Axios from 'axios';
-import { api } from '../settings.js';
 
 /* selectors */
 export const getAll = ({ posts }) => posts.data;
+export const getPublished = ({ posts }) => posts.data.filter(el => el.status === 'published');
 
 /* action name creator */
 const reducerName = 'posts';
@@ -25,12 +25,13 @@ export const addPost = payload => ({ payload, type: ADD_POST });
 export const updatePost = payload => ({ payload, type: UPDATE_POST });
 
 /* thunk creators */
-export const loadPostsRequest = () => {
+export const fetchPublished = () => {
+
   return (dispatch, getState) => {
     dispatch(fetchStarted());
 
     Axios
-      .get(`${api.url}/${api.posts}`)
+      .get('http://localhost:8000/api/posts')
       .then(res => {
         dispatch(fetchSuccess(res.data));
       })
