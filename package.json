@@ -46,6 +46,7 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
     "express": "^4.17.1",
+    "mongo-sanitize": "^1.1.0",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.7",
     "node-sass": "^4.13.0",
