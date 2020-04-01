@@ -5,36 +5,44 @@ import { Header } from '../Header/Header';
 
 import clsx from 'clsx';
 
-// import { connect } from 'react-redux';
-// import { getUser } from '../../../redux/userRedux.js';
+import { connect } from 'react-redux';
+import { fetchPublished } from '../../../redux/postsRedux.js';
 
 import styles from './MainLayout.module.scss';
 
-const Component = ({ className, children }) => (
-  <div className={clsx(className, styles.root)}>
-    <Header />
-    {children}
-  </div>
-);
+class Component extends React.Component {
 
-Component.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  user: PropTypes.object,
-};
+  static propTypes = {
+    children: PropTypes.node,
+    className: PropTypes.string,
+    posts: PropTypes.object,
+    fetchPublished: PropTypes.func,
+  };
 
-// const mapStateToProps = state => ({
-//   user: getUser(state),
-// });
+  componentDidMount() {
+    this.props.fetchPublished();
+  }
 
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
+  render() {
+    const { className, children } = this.props;
 
-// const Container = connect(mapStateToProps)(Component);
+    return (
+      <div className={clsx(className, styles.root)}>
+        <Header />
+        {children}
+      </div>
+    );
+  }
+}
+
+const mapDispatchToProps = (dispatch, state) => ({
+  fetchPublished: () => dispatch(fetchPublished(state)),
+});
+
+const Container = connect(null, mapDispatchToProps)(Component);
 
 export {
-  Component as MainLayout,
-  // Container as MainLayout,
+  // Component as MainLayout,
+  Container as MainLayout,
   Component as MainLayoutComponent,
 };

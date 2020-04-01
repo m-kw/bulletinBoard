@@ -3,6 +3,10 @@ import Axios from 'axios';
 /* selectors */
 export const getAll = ({ posts }) => posts.data;
 export const getPublished = ({ posts }) => posts.data.filter(el => el.status === 'published');
+export const getPostById = ({ posts }, postId) => {
+  const postsArray = posts.data.filter(el => el._id === postId);
+  return postsArray.length ? postsArray[0] : { error: true };
+};
 
 /* action name creator */
 const reducerName = 'posts';
@@ -41,11 +45,10 @@ export const fetchPublished = () => {
   };
 };
 
-
 /* reducer */
 export const reducer = (statePart = [], action = {}) => {
-  console.log('statePart', statePart);
-  console.log('action', action);
+  // console.log('statePart', statePart);
+  // console.log('action', action);
   switch (action.type) {
     case FETCH_START: {
       return {

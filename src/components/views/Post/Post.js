@@ -15,85 +15,99 @@ import TextField from '@material-ui/core/TextField';
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { getAll } from '../../../redux/postsRedux.js';
+import { getPostById } from '../../../redux/postsRedux.js';
 import { getUser } from '../../../redux/userRedux';
 
 import styles from './Post.module.scss';
 import { settings } from '../../../settings.js';
 
-const Component = ({ className, match, posts, user }) => (
-  <div className={clsx(className, styles.root)}>
-    <Container maxWidth="lg">
+class Component extends React.Component {
 
-      {posts.filter(el => el.id === match.params.id).map(el => (
-        <Card key={el.id} className={styles.card}>
-          <div className='row'>
-            <CardHeader title={el.title} subheader={`${el.date}/${el.updateDate}`} className={styles.title} />
+  static propTypes = {
+    className: PropTypes.string,
+    post: PropTypes.object,
+    user: PropTypes.object,
+    fetchPost: PropTypes.func,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string,
+      }),
+    }),
+  };
 
-            {el.price ? <TextField variant="outlined" label="price" className={styles.price} value={el.price} /> : ''}
+  render() {
+    const { className, post, user } = this.props;
 
-            {el.image ?
-              <CardMedia
-                component="img"
-                alt="post image"
-                height="140"
-                image={el.image || settings.image}
-                className={styles.image}
+    return (
+      <div className={clsx(className, styles.root)}>
+        <Container maxWidth="lg">
+
+          <Card className={styles.card}>
+            <div className='row'>
+              <CardHeader
+                title={post.title}
+                subheader={post.updated ? `${post.created}/${post.updated}` : post.created}
+                className={styles.title}
               />
+
+              {post.price ? <TextField variant="outlined" label="price" className={styles.price} value={post.price} /> : ''}
+
+              {post.image ?
+                <CardMedia
+                  component="img"
+                  alt="post image"
+                  height="140"
+                  image={post.image || settings.image}
+                  className={styles.image}
+                />
+                : ''
+              }
+            </div>
+
+            <div className="row">
+              <CardContent className={styles.contentWrapper}>
+                <TextField multiline variant="outlined" value={post.content} className={styles.content} />
+
+                <div className={styles.status}>
+                  <i>{post.status}</i>
+                </div>
+
+                <div className={styles.contact}>
+                  <h3>Contact details</h3>
+                  <p>E-mail: {post.author}</p>
+                  {post.phone ? <p>Phone number: {post.phone}</p> : ''}
+                </div>
+              </CardContent>
+            </div>
+
+            {user.logged && user.mail === post.author ?
+              <CardActions className={styles.link}>
+                <Button size="small" color="secondary" variant="contained" href={`/post/${post._id}/edit`}>
+                  Edit
+                </Button>
+              </CardActions>
               : ''
             }
-          </div>
 
-          <div className="row">
-            <CardContent className={styles.contentWrapper}>
-              <TextField multiline variant="outlined" value={el.content} className={styles.content} />
+          </Card>
+        </Container>
+      </div>
+    );
+  }
+}
 
-              <div className={styles.status}>
-                <i>{el.status}</i>
-              </div>
-
-              <div className={styles.contact}>
-                <h3>Contact details</h3>
-                <p>E-mail: {el.mail}</p>
-                {el.phone ? <p>Phone number: {el.phone}</p> : ''}
-              </div>
-            </CardContent>
-          </div>
-
-          {user.logged && user.id === el.userId ?
-            <CardActions className={styles.link}>
-              <Button size="small" color="secondary" variant="contained" href={`/post/${el.id}/edit`}>
-                  Edit
-              </Button>
-            </CardActions>
-            : ''
-          }
-
-        </Card>
-      ))}
-    </Container>
-  </div>
-);
-
-Component.propTypes = {
-  className: PropTypes.string,
-  posts: PropTypes.array,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string,
-    }),
-  }),
-  user: PropTypes.object,
-};
-
-const mapStateToProps = state => ({
-  posts: getAll(state),
+const mapStateToProps = (state, props) => ({
+  post: getPostById(state, props.match.params.id),
   user: getUser(state),
 });
 
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
+// const mapDispatchToProps = (dispatch) => {
+//   console.log('props', props);
+//   return ({
+//     fetchPost: () => dispatch(fetchPostById(props.match.params.id)),
+//   });
+// };
+
 
 const PostContainer = connect(mapStateToProps)(Component);
 

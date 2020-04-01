@@ -15,8 +15,6 @@ export const changeUser = payload => ({ payload, type: CHANGE_USER });
 
 /* reducer */
 export const reducer = (statePart = [], action = {}) => {
-  console.log('statePart', statePart);
-  console.log('action', action);
   switch (action.type) {
     default:
       return statePart;

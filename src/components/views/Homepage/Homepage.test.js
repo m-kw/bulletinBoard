@@ -11,7 +11,6 @@ const mockProps = {
     id: '1',
     logged: false,
   },
-  fetchPublished: () => console.log('fetch'),
 };
 
 describe('Component Homepage', () => {
