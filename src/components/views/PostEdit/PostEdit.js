@@ -10,11 +10,12 @@ import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { getAll, updatePost } from '../../../redux/postsRedux.js';
+import { getPublished, updatePost } from '../../../redux/postsRedux.js';
 
 import styles from './PostEdit.module.scss';
 
 const Component = ({ className, posts, updatePost, match }) => {
+  console.log('pposts', posts);
 
   const postArray = posts.filter(el => el.id === match.params.id);
 
@@ -129,7 +130,7 @@ Component.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  posts: getAll(state),
+  posts: getPublished(state),
 });
 
 const mapDispatchToProps = dispatch => ({

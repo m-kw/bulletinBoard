@@ -82,7 +82,7 @@ class Component extends React.Component {
 
             {user.logged && user.mail === post.author ?
               <CardActions className={styles.link}>
-                <Button size="small" color="secondary" variant="contained" href={`/post/${post._id}/edit`}>
+                <Button size="small" color="secondary" variant="contained" href={`/posts/${post._id}/edit`}>
                   Edit
                 </Button>
               </CardActions>
