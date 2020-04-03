@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
+const formidable = require('express-formidable');
+const shortid = require('shortid');
 
 const postsRoutes = require('./routes/posts.routes');
 
@@ -11,6 +13,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, '/public')));
+
+app.use(formidable({ uploadDir: './public/uploads/' }, [{
+  event: 'fileBegin', // on every file upload...
+  action: (req, res, next, name, file) => {
+    const fileName = shortid.generate() + '.' + file.name.split('.')[1];
+    file.path = __dirname + '/public/uploads/photo_' + fileName;
+  },
+},
+]));
 
 /* API ENDPOINTS */
 app.use('/api', postsRoutes);
@@ -37,5 +49,5 @@ db.on('error', err => console.log('Error: ' + err));
 /* START SERVER */
 const port = process.env.PORT || 8000;
 app.listen(port, () => {
-  console.log('Server is running on port: '+port);
+  console.log('Server is running on port: '+ port);
 });

@@ -21,11 +21,14 @@
 
       .button {
         margin: 3px;
-      }
+        background: $button-secondary;
+        color: $font-dark;
 
-      // .input {
-      //   display: none,
-      // }
+        &:hover {
+          background: darken($color: $button-secondary, $amount: 15%);
+          color: $font-light;
+        }
+      }
     }
   }
 }

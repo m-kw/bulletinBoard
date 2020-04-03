@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { API_URL } from '../settings.js';
 
 /* selectors */
 export const getAll = ({ posts }) => posts.data;
@@ -7,6 +8,7 @@ export const getPostById = ({ posts }, postId) => {
   const postsArray = posts.data.filter(el => el._id === postId);
   return postsArray.length ? postsArray[0] : { error: true };
 };
+// export const getRequest = ({ posts }, name) => posts.requests[name];
 
 /* action name creator */
 const reducerName = 'posts';
@@ -17,6 +19,10 @@ const FETCH_START = createActionName('FETCH_START');
 const FETCH_SUCCESS = createActionName('FETCH_SUCCESS');
 const FETCH_ERROR = createActionName('FETCH_ERROR');
 
+// const START_REQUEST = createActionName('START_REQUEST');
+// const END_REQUEST = createActionName('END_REQUEST');
+// const ERROR_REQUEST = createActionName('ERROR_REQUEST');
+
 const ADD_POST = createActionName('ADD_POST');
 const UPDATE_POST = createActionName('UPDATE_POST');
 
@@ -24,6 +30,10 @@ const UPDATE_POST = createActionName('UPDATE_POST');
 export const fetchStarted = payload => ({ payload, type: FETCH_START });
 export const fetchSuccess = payload => ({ payload, type: FETCH_SUCCESS });
 export const fetchError = payload => ({ payload, type: FETCH_ERROR });
+
+// export const startRequest = payload => ({ payload, type: START_REQUEST });
+// export const endRequest = payload => ({ payload, type: END_REQUEST });
+// export const errorRequest = payload => ({ payload, type: ERROR_REQUEST });
 
 export const addPost = payload => ({ payload, type: ADD_POST });
 export const updatePost = payload => ({ payload, type: UPDATE_POST });
@@ -42,6 +52,33 @@ export const fetchPublished = () => {
       .catch(err => {
         dispatch(fetchError(err.message || true));
       });
+  };
+};
+
+export const addPostRequest = (data) => {
+
+  console.log('addPost request');
+
+  return async dispatch => {
+
+    dispatch(fetchStarted());
+
+    try {
+      let res = await Axios.post(
+        `${API_URL}/posts`,
+        data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      dispatch(addPost(res.data));
+      dispatch(fetchSuccess());
+    } catch (e) {
+      dispatch(fetchError(e.message));
+    }
   };
 };
 

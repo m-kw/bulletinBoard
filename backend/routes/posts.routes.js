@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const sanitize = require('mongo-sanitize');
+// const sanitize = require('mongo-sanitize');
 
 const Post = require('../models/post.model');
 
@@ -34,26 +34,17 @@ router.get('/posts/:id', async (req, res) => {
 router.post('/posts', async (req, res) => {
 
   try {
-    const cleanedBody = sanitize(req.body);
-    const { author, created, updated, status, title, content, image, price, phone, location } = cleanedBody;
+    let fileName;
 
-    const newPost = new Post({
-      author: author,
-      created: created,
-      updated: updated,
-      status: status,
-      title: title,
-      content: content,
-      image: image,
-      price: price,
-      phone: phone,
-      location: location,
-    });
+    if (!req.files.image) fileName = null;
+    else fileName = req.files.image.path.split('/').slice(-1)[0];
 
+    const newPost = new Post({ ...req.fields, image: fileName });
     await newPost.save();
+
     res.json(newPost);
-  }
-  catch (err) {
+
+  } catch (err) {
     res.status(500).json(err);
   }
 });

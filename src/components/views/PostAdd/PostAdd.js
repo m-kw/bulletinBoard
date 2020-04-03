@@ -4,43 +4,40 @@ import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 import clsx from 'clsx';
-import shortid from 'shortid';
 
 import { connect } from 'react-redux';
-import { getAll, addPost } from '../../../redux/postsRedux.js';
+import { addPostRequest } from '../../../redux/postsRedux.js';
 
 import styles from './PostAdd.module.scss';
 
-const Component = ({ className, addPost }) => {
+const Component = ({ className, addPost, history }) => {
 
   const today = new Date();
   const day = today.getDate();
-  const month = today.getMonth();
+  const month = today.getMonth() + 1;
   const year = today.getFullYear();
   const date = day + '/' + month + '/' + year;
 
-  const titleProps = {
-    minLength: 10,
-  };
-
-  const contentProps = {
-    minLength: 20,
-  };
-
   const [post, setPost] = React.useState({
-    id: shortid.generate(),
-    date: date,
+    author: '',
+    title: '',
+    content: '',
+    created: date,
+    phone: '',
+    price: '',
+    location: '',
+    image: null,
   });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Submitted');
 
-    await addPost(post);
+    addPost(post);
+    // history.push('/user-posts');
+
   };
 
   const handleChange = async (event, name) => {
@@ -48,6 +45,12 @@ const Component = ({ className, addPost }) => {
       ...post,
       [name]: event.target.value,
     });
+  };
+
+  const setImage = ({ target }) => {
+    const { files } = target;
+
+    if (files) setPost({ ...post, image: files[0] });
   };
 
   return (
@@ -58,61 +61,44 @@ const Component = ({ className, addPost }) => {
 
           <CardHeader title="Add new post" />
 
-          <form className={styles.form} autoComplete="off" onSubmit={e => handleSubmit(e)}>
-            <TextField
-              id="title"
-              label="Title"
-              required
-              inputProps={titleProps}
-              value={post.title}
-              onChange={e => handleChange(e, 'title')}
-            />
-            <TextField
-              id="price"
-              label="Price"
-              type="number"
-              value={post.price}
-              onChange={e => handleChange(e, 'price')}
-            />
-            <input
-              accept="image/*"
-              className={styles.input}
-              id="upload-photo"
-              multiple
-              type="file"
-              onChange={e => handleChange(e, 'image')}
-            />
-            <TextField
-              variant="outlined"
-              multiline
-              id="content"
-              inputProps={contentProps}
-              label="Content"
-              placeholder="Write your post here"
-              rows="10"
-              required
-              value={post.content}
-              onChange={e => handleChange(e, 'content')}
+          <Form className={styles.form} onSubmit={e => handleSubmit(e)}>
+            <FormGroup>
+              <Label for="title">Title*</Label>
+              <Input type="text" name="title" id="title" minLength="10" onChange={e => handleChange(e, 'title')} required />
+            </FormGroup>
 
-            />
-            <TextField
-              id="mail"
-              label="E-mail"
-              type="email"
-              required
-              value={post.mail}
-              onChange={e => handleChange(e, 'mail')}
-            />
-            <TextField
-              id="phone"
-              label="Phone number"
-              type="number"
-              value={post.phone}
-              onChange={e => handleChange(e, 'phone')}
-            />
-            <Button type="submit" color="secondary" variant="contained" className={styles.button}>Save</Button>
-            <Button color="secondary" href="/" variant="contained" className={styles.button}>Return</Button>
-          </form>
+            <FormGroup>
+              <Label for="price">Price</Label>
+              <Input type="number" name="price" id="price" onChange={e => handleChange(e, 'price')} />
+            </FormGroup>
+
+            <FormGroup>
+              <Input type="file" name="image" id="image" accept="image/*" className={styles.input} onChange={setImage} />
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="content">Content*</Label>
+              <Input type="text" name="content" id="content" minLength="20" placeholder="Write your post here" onChange={e => handleChange(e, 'content')} required />
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="author">E-mail*</Label>
+              <Input type="email" name="author" id="author" required onChange={e => handleChange(e, 'author')} />
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="phone">Phone</Label>
+              <Input type="number" name="phone" id="phone" onChange={e => handleChange(e, 'phone')} />
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="location">Location</Label>
+              <Input type="text" name="location" id="location" onChange={e => handleChange(e, 'location')} />
+            </FormGroup>
+
+            <Button type="submit" className={styles.button}>Save</Button>
+            <Button href="/" className={styles.button}>Return</Button>
+          </Form>
         </Card>
       </Container>
     </div>
@@ -122,17 +108,18 @@ const Component = ({ className, addPost }) => {
 Component.propTypes = {
   className: PropTypes.string,
   addPost: PropTypes.func,
+  history: PropTypes.object,
 };
 
-const mapStateToProps = state => ({
-  posts: getAll(state),
-});
+// const mapStateToProps = state => ({
+//   posts: getAll(state),
+// });
 
 const mapDispatchToProps = dispatch => ({
-  addPost: post => dispatch(addPost(post)),
+  addPost: data => dispatch(addPostRequest(data)),
 });
 
-const PostAddContainer = connect(mapStateToProps, mapDispatchToProps)(Component);
+const PostAddContainer = connect(null, mapDispatchToProps)(Component);
 
 export {
   // Component as PostAdd,
