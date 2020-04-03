@@ -49,4 +49,37 @@ router.post('/posts', async (req, res) => {
   }
 });
 
+router.put('/posts/:id', async (req, res) => {
+  const { author, title, content, price, phone, location, updated } = req.fields;
+
+  console.log('req', req);
+
+  try {
+
+    let fileName;
+
+    if (!req.files.image) fileName = null;
+    else fileName = req.files.image.path.split('/').slice(-1)[0];
+
+    const post = await Post.findOne({ _id: req.params.id });
+
+    if (!post) res.status(404).json({ message: 'Post not found...' });
+    else {
+      post.author = author;
+      post.title = title;
+      post.content = content;
+      post.price = price;
+      post.phone = phone;
+      post.location = location;
+      post.image = fileName;
+      post.updated = updated;
+      await post.save();
+      res.json(post);
+    }
+  }
+  catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;
