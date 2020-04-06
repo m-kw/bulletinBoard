@@ -1,143 +1,153 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { Form, FormGroup, Label, Input } from 'reactstrap';
 
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { getPublished, updatePost } from '../../../redux/postsRedux.js';
+import { updatePost, getPostById } from '../../../redux/postsRedux.js';
 
 import styles from './PostEdit.module.scss';
 
-const Component = ({ className, posts, updatePost, match }) => {
-  console.log('pposts', posts);
+class Component extends React.Component {
 
-  const postArray = posts.filter(el => el.id === match.params.id);
+  state = {
+    postData: {
+      id: this.props.post._id,
+      title: this.props.post.title,
+      content: this.props.post.content,
+      author: this.props.post.author,
+      location: this.props.post.location,
+      created: this.props.post.created,
+      phone: this.props.post.phone,
+      price: this.props.post.price,
+      image: this.props.post.image,
+    },
+  }
 
-  const [post, setPost] = React.useState(postArray[0]);
-
-  // const today = new Date();
-  // const day = today.getDate();
-  // const month = today.getMonth();
-  // const year = today.getFullYear();
-  // const date = day + '/' + month + '/' + year;
-
-  const titleProps = {
-    minLength: 10,
+  static propTypes = {
+    className: PropTypes.string,
+    post: PropTypes.object,
+    updatePost: PropTypes.func,
   };
 
-  const contentProps = {
-    minLength: 20,
-  };
+  static getDerivedStateFromProps(props,state) {
 
-  const handleSubmit = async (e) => {
+    if (props.post !== state.postUpdated) {
+      return { postUpdated: props.post };
+    }
+
+    return null;
+  }
+
+  handleSubmit = (e) => {
     e.preventDefault();
 
-    await updatePost(post);
+    console.log('submitted');
+
+    //   const today = new Date();
+    //   const day = today.getDate();
+    //   const month = today.getMonth() + 1;
+    //   const year = today.getFullYear();
+    //   const date = day + '/' + month + '/' + year;
+
+    //   this.setState({ postUpdated: { ...this.state.postUpdated, updated: date }});
+
+  //   updatePost(this.props.postUpdated);
+  //   //history.push('/user-posts');
   };
 
-  const handleChange = async (event, name) => {
-    await setPost({
-      ...post,
-      [name]: event.target.value,
-    });
+  handleChange = ({ target }) => {
+    const { name, value } = target;
+    console.log('target', target);
+
+    this.setState({ postUpdated: { ...this.state.postUpdated, [name]: value }});
   };
 
-  return (
-    <div className={clsx(className, styles.root)}>
-      <Container maxWidth="lg">
+  setImage = ({ target }) => {
+    const files = target.files;
 
-        <Card className={styles.card}>
+    if (files) this.setState({ postUpdated: { ...this.state.postUpdated, image: files[0] }});
+  };
 
-          <CardHeader title="Edit post" />
+  render() {
+    const { className } = this.props;
+    const { handleSubmit, handleChange, setImage } = this;
+    const { postUpdated } = this.state;
 
-          <form className={styles.form} onSubmit={e => handleSubmit(e)}>
-            <TextField
-              id="title"
-              label="Title"
-              required
-              inputProps={titleProps}
-              value={post.title}
-              onChange={e => handleChange(e, 'title')}
-            />
-            <TextField
-              id="price"
-              label="Price"
-              type="number"
-              value={post.price}
-              onChange={e => handleChange(e, 'price')}
-            />
-            <input
-              accept="image/*"
-              className={styles.input}
-              id="upload-photo"
-              multiple
-              type="file"
-              onChange={e => handleChange(e, 'image')}
-            />
-            <img src={post.image} alt="post img" className={styles.image} />
-            <TextField
-              variant="outlined"
-              multiline
-              id="content"
-              inputProps={contentProps}
-              label="Content"
-              placeholder="Write your post here"
-              rows="10"
-              required
-              value={post.content}
-              onChange={e => handleChange(e, 'content')}
+    console.log('postUpdated', postUpdated);
 
-            />
-            <TextField
-              id="mail"
-              label="E-mail"
-              type="email"
-              required
-              value={post.mail}
-              onChange={e => handleChange(e, 'mail')}
-            />
-            <TextField
-              id="phone"
-              label="Phone number"
-              type="number"
-              value={post.phone}
-              onChange={e => handleChange(e, 'phone')}
-            />
-            <Button type="submit" color="secondary" variant="contained" className={styles.button}>Save</Button>
-            <Button color="secondary" href="/" variant="contained" className={styles.button}>Return</Button>
-          </form>
-        </Card>
-      </Container>
-    </div>
-  );
-};
+    return (
+      <div className={clsx(className, styles.root)}>
+        <Container maxWidth="lg">
 
-Component.propTypes = {
-  className: PropTypes.string,
-  posts: PropTypes.array,
-  updatePost: PropTypes.func,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string,
-    }),
-  }),
-};
+          <Card className={styles.card}>
 
-const mapStateToProps = state => ({
-  posts: getPublished(state),
+            <CardHeader title="Edit post" />
+
+            <Form className={styles.form} onSubmit={e => handleSubmit(e)}>
+              <FormGroup>
+                <Label for="title">Title*</Label>
+                <Input type="text" name="title" id="title" minLength="10" value={postUpdated.title} onChange={handleChange} required />
+              </FormGroup>
+
+              <FormGroup>
+                <Label for="price">Price</Label>
+                <Input type="number" name="price" id="price" value={postUpdated.price} onChange={handleChange} />
+              </FormGroup>
+
+              <FormGroup>
+                <Input type="file" name="image" id="image" accept="image/*" className={styles.input} value={postUpdated.image} onChange={setImage} />
+              </FormGroup>
+              {postUpdated.image && <img src={postUpdated.image} alt="post img" className={styles.image} />}
+
+
+              <FormGroup>
+                <Label for="content">Content*</Label>
+                <Input type="text" name="content" id="content" minLength="20" placeholder="Write your post here" value={postUpdated.content} onChange={handleChange} required />
+              </FormGroup>
+
+              <FormGroup>
+                <Label for="author">E-mail*</Label>
+                <Input type="email" name="author" id="author" required value={postUpdated.author} onChange={handleChange} />
+              </FormGroup>
+
+              <FormGroup>
+                <Label for="phone">Phone</Label>
+                <Input type="text" name="phone" id="phone" value={postUpdated.phone} onChange={handleChange} />
+              </FormGroup>
+
+              <FormGroup>
+                <Label for="location">Location</Label>
+                <Input type="text" name="location" id="location" value={postUpdated.location} onChange={handleChange} />
+              </FormGroup>
+
+              <Button type="submit" color="secondary" variant="contained" className={styles.button}>Save</Button>
+              <Button color="secondary" href="/" variant="contained" className={styles.button}>Return</Button>
+            </Form>
+          </Card>
+        </Container>
+      </div>
+    );
+  }
+}
+
+
+const mapStateToProps = (state, props) => ({
+  post: getPostById(state, props.match.params.id),
 });
 
 const mapDispatchToProps = dispatch => ({
   updatePost: post => dispatch(updatePost(post)),
 });
 
-const PostEditContainer = connect(mapStateToProps, mapDispatchToProps)(Component);
+const PostEditContainer = connect(mapStateToProps, mapDispatchToProps)(withRouter(Component));
 
 export {
   // Component as PostEdit,

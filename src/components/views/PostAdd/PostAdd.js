@@ -88,7 +88,7 @@ const Component = ({ className, addPost, history }) => {
 
             <FormGroup>
               <Label for="phone">Phone</Label>
-              <Input type="number" name="phone" id="phone" onChange={e => handleChange(e, 'phone')} />
+              <Input type="text" name="phone" id="phone" onChange={e => handleChange(e, 'phone')} />
             </FormGroup>
 
             <FormGroup>
