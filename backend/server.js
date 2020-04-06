@@ -5,11 +5,12 @@ const mongoose = require('mongoose');
 const formidable = require('express-formidable');
 const shortid = require('shortid');
 const session = require('express-session');
-const dotenv = require('dotenv');
 const passport = require('passport');
-const Auth0Strategy = require('passport-auth0');
+const passportConfig = require('./config/passport');
+const userInViews = require('./config/userInViews');
 
 const postsRoutes = require('./routes/posts.routes');
+const authRoutes = require('./routes/auth.routes');
 
 const app = express();
 
@@ -30,39 +31,17 @@ if (app.get('env') === 'production') {
 // "Unable to verify authorization request state"
 // app.set('trust proxy', 1);
 
-app.use(session(sess));
-
-/* PASSPORT & AUTH0 CONFIG */
-dotenv.config();
-
-const strategy = new Auth0Strategy(
-  {
-    domain: process.env.AUTH0_DOMAIN,
-    clientID: process.env.AUTH0_CLIENT_ID,
-    clientSecret: process.env.AUTH0_CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000',
-  },
-  function (accessToken, refreshToken, extraParams, profile, done) {
-    return done(null, profile);
-  }
-);
-
-passport.use(strategy);
-passport.serializeUser(function (user, done) {
-  done(null, user);
-});
-passport.deserializeUser(function (user, done) {
-  done(null, user);
-});
-
-app.use(passport.initialize());
-app.use(passport.session());
-
 /* MIDDLEWARE */
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '/public')));
+
+app.use(session(sess));
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(userInViews());
 
 app.use(formidable({ uploadDir: './public/uploads/' }, [{
   event: 'fileBegin', // on every file upload...
