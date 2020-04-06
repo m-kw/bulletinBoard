@@ -16,19 +16,22 @@ import { updatePost, getPostById } from '../../../redux/postsRedux.js';
 import styles from './PostEdit.module.scss';
 
 class Component extends React.Component {
+  constructor(props) {
+    super(props);
 
-  state = {
-    postData: {
-      id: this.props.post._id,
-      title: this.props.post.title,
-      content: this.props.post.content,
-      author: this.props.post.author,
-      location: this.props.post.location,
-      created: this.props.post.created,
-      phone: this.props.post.phone,
-      price: this.props.post.price,
-      image: this.props.post.image,
-    },
+    this.state = {
+      postData: {
+        id: props.post._id,
+        title: props.post.title,
+        content: props.post.content,
+        author: props.post.author,
+        location: props.post.location,
+        created: props.post.created,
+        phone: props.post.phone,
+        price: props.post.price,
+        image: props.post.image,
+      },
+    };
   }
 
   static propTypes = {
